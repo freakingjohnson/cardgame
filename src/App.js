@@ -8,9 +8,7 @@ class App extends Component {
     return (
       <MuiThemeProvider>
       <div>
-        <header className="App-header">
-          
-        </header>
+
         <CardCreator/>
       </div>
       </MuiThemeProvider>
