@@ -21,33 +21,27 @@ class CardCreator extends Component {
             name: '',
             description: '',
             type: '',
-            level: undefined,
+            level: '',
             badStuff: '',
             decrementItems: '',
-            decrementLevel: '',
+            decrementLevels: '',
         }
         this.handleName = this.handleName.bind(this)
         this.handleDescription = this.handleDescription.bind(this)
         this.handleType = this.handleType.bind(this)
         this.handleLevel = this.handleLevel.bind(this)
         this.handleBadStuff = this.handleBadStuff.bind(this)
+        this.handleDecrementItems = this.handleDecrementItems.bind(this);
+        this.handleDecrementLevels = this.handleDecrementLevels.bind(this);
     }
 
-    handleName = (event) => {
-        this.setState({
-            name: event.target.value
-        })
-    };
-    handleDescription = (event) => {
-        this.setState({
-            description: event.target.value
-        })
-    }
-    handleType = (event, index, type) => this.setState({ type });
+    handleName = (event) => this.setState({ name: event.target.value })
+    handleDescription = (event) => this.setState({ description: event.target.value })
+    handleType = (event, index, type) => this.setState({ type, badStuff: '', level: '', decrementItems: '', decrementLevels: '' })
     handleLevel = (event, index, level) => this.setState({ level });
-    handleBadStuff = (event, index, badStuff) => this.setState({ badStuff });
-    handleDecrementLevel = (event, index, decrementLevel) => this.setState({ decrementLevel, decrementItems: '' });
-    handleDecrementItems = (event, index, decrementItems) => this.setState({ decrementItems, decrementLevel: '' });
+    handleBadStuff = (event, index, badStuff) => this.setState({ badStuff, decrementItems: '', decrementLevels: '' });
+    handleDecrementLevels = (event, index, decrementLevels) => this.setState({ decrementLevels, decrementItems: '' });
+    handleDecrementItems = (event, index, decrementItems) => this.setState({ decrementItems, decrementLevels: '' });
 
     render() {
         console.log(this.state)
@@ -58,8 +52,8 @@ class CardCreator extends Component {
             floatingLabelText="How Many?"
             hintText="How Many?"
             maxHeight={300}
-            value={this.state.badStuff === 2 ? this.state.decrementLevel : this.state.badStuff === 3 ? this.state.decrementItems : undefined}
-            onChange={this.state.badStuff === 2 ? this.handleDecrementLevel : this.state.badStuff === 3 ? this.handleDecrementItems : undefined}
+            value={this.state.badStuff === 2 ? this.state.decrementLevels : this.state.badStuff === 3 ? this.state.decrementItems : undefined}
+            onChange={this.state.badStuff === 2 ? this.handleDecrementLevels : this.state.badStuff === 3 ? this.handleDecrementItems : undefined}
         >
             {howMany}
         </SelectField >
@@ -100,7 +94,8 @@ class CardCreator extends Component {
                     floatingLabelText="Level"
                     hintText="Level"
                     disabled={this.state.type === 1 ? false : true}
-                    maxHeight={300} value={this.state.level}
+                    maxHeight={300}
+                    value={this.state.level}
                     onChange={this.handleLevel}
                 >
                     {level}
@@ -114,7 +109,7 @@ class CardCreator extends Component {
                     onChange={this.handleBadStuff}
                 >
                     <MenuItem value={1} primaryText="You Die" disabled={this.state.type === 1 ? false : true} />
-                    <MenuItem value={2} primaryText={`Lose ${this.state.decrementLevel} Level${this.state.decrementLevel > 1 ? "s" : ''}`} />
+                    <MenuItem value={2} primaryText={`Lose ${this.state.decrementLevels} Level${this.state.decrementLevels > 1 ? "s" : ''}`} />
                     <MenuItem value={3} primaryText={`Lose ${this.state.decrementItems} Item${this.state.decrementItems > 1 ? "s" : ''}`} />
                     <MenuItem value={4} primaryText="Lose All Items" />
                     <MenuItem value={5} primaryText="Lose Class" />

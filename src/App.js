@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import CardCreator from './Components/CardCreator'
+import ReduxCardCreator from './components/ReduxCardCreator'
+// import Uploader from './components/Upload'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './App.css';
 
@@ -9,7 +10,7 @@ class App extends Component {
       <MuiThemeProvider>
       <div>
 
-        <CardCreator/>
+        <ReduxCardCreator/>
       </div>
       </MuiThemeProvider>
     );
