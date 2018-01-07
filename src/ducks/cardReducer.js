@@ -5,6 +5,7 @@ const ITEMTYPE = "ITEMTYPE"
 const LEVEL = "LEVEL"
 const BADSTUFF = "BADSTUFF"
 const HOWMANY = "HOWMANY"
+const FILEURL = "FILEURL"
 
 const initialState = {
     name: ''
@@ -14,6 +15,7 @@ const initialState = {
     , level: ''
     , badStuff: ''
     , howMany: ''
+    , fileURL: ''
 }
 
 export default function reducer(state = initialState, action) {
@@ -25,7 +27,7 @@ export default function reducer(state = initialState, action) {
             return Object.assign({}, state, { description: action.payload })
 
         case CARDTYPE:
-            return Object.assign({}, state, { cardType: action.payload, badStuff: '', level: '', decrementItems: '', howMany: '', })
+            return Object.assign({}, state, { cardType: action.payload, badStuff: '', level: '', howMany: '', })
 
         case ITEMTYPE:
             return Object.assign({}, state, { itemType: action.payload })
@@ -37,8 +39,10 @@ export default function reducer(state = initialState, action) {
             return Object.assign({}, state, { badStuff: action.payload })
 
         case HOWMANY:
-            return Object.assign({}, state, { howMany: action.payload, decrementItems: '' })
+            return Object.assign({}, state, { howMany: action.payload})
 
+        case FILEURL:
+            return Object.assign({}, state, { fileURL: action.payload, })
         default:
             return state;
     }

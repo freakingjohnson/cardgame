@@ -1,72 +1,89 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
-import { CloudinaryContext, Transformation, Image } from 'cloudinary-react';
+import axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
-import deleteImageFromCloudinary from './deleteImageFromCloudinary'
+import Dropzone from 'react-dropzone'
 
 export default class Upload extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            gallery: ''
+            imageData: '',
+            file: '',
+            fileURL: ''
         }
-        this.uploadWidget = this.uploadWidget.bind(this);
+        // this.uploadWidget = this.uploadWidget.bind(this);
+        this.handleUpload = this.handleUpload.bind(this);
+    }
+
+
+    onDrop = (file) => {
+        this.setState({
+            file: file
+        })
+        console.log(file)
 
     }
-    // componentDidMount() {
-    //     axios.get('https://res.cloudinary.com/freakingjohnson/image/list/cardimages.json')
-    //         .then(res => {
-    //             console.log(res.data.resources);
-    //             this.setState({ gallery: res.data.resources });
-    //         });
-    // }
 
-    uploadWidget = () => {
-        const _this = this
-        window.cloudinary.openUploadWidget({ cloud_name: 'freakingjohnson', upload_preset: 'efvqy0li', tags: ['cardimages'] },
-        (error, result) => {
-                _this.state.gallery ? deleteImageFromCloudinary(_this.state.gallery) : undefined
-                _this.setState({ gallery: '' })
-                result ? _this.setState({ gallery: _this.state.gallery.concat(result[0].public_id) }) : undefined
-                console.log(_this.state.gallery)
-            }
-        );
+    onDropRejected = (event) => {
+        this.setState({
+            file: undefined
+        })
+        alert("try again")
+    }
+    handleUpload = (event) => {
+        console.log(this.state.file)
+        const uploaders = this.state.file.map(file => {
+            // Initial FormData
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("tags", `cardimages`);
+            formData.append("upload_preset", "efvqy0li"); // Replace the preset name with your own
+            formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY); // Replace API key with your own Cloudinary key
+            formData.append("timestamp", (Date.now() / 1000) | 0);
+            return axios.post("https://api.cloudinary.com/v1_1/freakingjohnson/image/upload", formData, {
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+            }).then(response => {
+                const data = response.data;
+                const fileURL = data.secure_url // You should store this URL for future references in your app
+                this.setState ({
+                    fileURL: fileURL
+                })
+                console.log(data);
+            })
+        });
     }
 
     render() {
         const {
-            gallery
+            file
         } = this.state
-        console.log(gallery)
-        const reference = `https://res.cloudinary.com/freakingjohnson/image/upload/${gallery}.jpg`
-        const image = gallery ? <CloudinaryContext cloudName="freakingjohnson">
-            <div>
-                <a target="_blank" href={reference}>
-                    <Image publicId={gallery}>
-                        <Transformation
-                            crop="scale"
-                            width="300"
-                            height="200"
-                            dpr="auto"
-                            responsive_placeholder="blank"
-                        />
-                    </Image>
-                </a>
-            </div>
-        </CloudinaryContext> : undefined
+        console.log(file)
+        let preview = file ? file[0].preview : ''
         return (
             <div className="Uploader">
 
                 <div>
                     <div>
+                        <Dropzone
+                            maxSize={50000}
+                            onDrop={this.onDrop.bind(this)}
+                            onDropRejected={this.onDropRejected}
+                            multiple={false}
+                        >
+                            <p>drop file here</p>
+                        </Dropzone>
                         <RaisedButton
                             primary={true}
-                            label="add image"
-                            onClick={this.uploadWidget}
+                            label="upload image"
+                            onClick={this.handleUpload}
+                            disabled={!file ? true : false}
                         />
-                        {image}
                     </div>
-
+                    <aside>
+                        <div>
+                            <img src={preview} alt='preview' />
+                        </div>
+                    </aside>
 
                 </div>
             </div>

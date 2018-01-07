@@ -12,9 +12,9 @@ const app = express()
 // app.use(cors())
 app.use(bodyParser.json())
 
-cloudinary.v2.api.resources_by_tag("cardimages", function (error, result) { console.log(result) })
+// cloudinary.v2.api.resources_by_tag("cardimages", function (error, result) { console.log(result) })
 // cloudinary.v2.uploader.destroy(publicID, function(error, result){console.log(result)});
-cloudinary.v2.api.delete_resources(['image1'], function (error, result) { console.log(result); });
+// cloudinary.v2.api.delete_resources(['image1'], function (error, result) { console.log(result); });
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -26,7 +26,6 @@ cloudinary.config({
 //     app.set
 //         ('db', db)
 // })
-
 app.use(session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
@@ -34,6 +33,11 @@ app.use(session({
 }))
 app.use(express.static(__dirname + '/../build'))
 
+// app.post('/upload', function (req, res, next) {
+//     cloudinary.uploader.upload(req.file.path, function (result) {
+//         console.log(result);
+//     });
+// })
 // app.use(passport.initialize())
 // app.use(passport.session())
 
