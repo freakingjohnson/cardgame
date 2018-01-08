@@ -2,26 +2,27 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dropzone from 'react-dropzone'
+import { connect } from "react-redux"
+import { handlePicture } from '../ducks/cardReducer';
 
-export default class Upload extends Component {
+class Upload extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageData: '',
             file: '',
             fileURL: ''
         }
-        // this.uploadWidget = this.uploadWidget.bind(this);
+
         this.handleUpload = this.handleUpload.bind(this);
     }
-
 
     onDrop = (file) => {
         this.setState({
             file: file
-        })
-        console.log(file)
+        });
+        setTimeout(() => handlePicture(this.state.file), 2000)
 
+        console.log(file)
     }
 
     onDropRejected = (event) => {
@@ -30,9 +31,10 @@ export default class Upload extends Component {
         })
         alert("try again")
     }
+
     handleUpload = (event) => {
         console.log(this.state.file)
-        const uploaders = this.state.file.map(file => {
+        let uploaders = this.state.file.map(file => {
             // Initial FormData
             const formData = new FormData();
             formData.append("file", file);
@@ -45,7 +47,7 @@ export default class Upload extends Component {
             }).then(response => {
                 const data = response.data;
                 const fileURL = data.secure_url // You should store this URL for future references in your app
-                this.setState ({
+                this.setState({
                     fileURL: fileURL
                 })
                 console.log(data);
@@ -57,8 +59,11 @@ export default class Upload extends Component {
         const {
             file
         } = this.state
+        const {
+            handlePicture
+        } = this.props
         console.log(file)
-        let preview = file ? file[0].preview : ''
+        const  onDropAccepted = function(file){ setTimeout(() => handlePicture(file), 0)}
         return (
             <div className="Uploader">
 
@@ -67,6 +72,7 @@ export default class Upload extends Component {
                         <Dropzone
                             maxSize={50000}
                             onDrop={this.onDrop.bind(this)}
+                            onDropAccepted={onDropAccepted}
                             onDropRejected={this.onDropRejected}
                             multiple={false}
                         >
@@ -79,15 +85,15 @@ export default class Upload extends Component {
                             disabled={!file ? true : false}
                         />
                     </div>
-                    <aside>
-                        <div>
-                            <img src={preview} alt='preview' />
-                        </div>
-                    </aside>
-
                 </div>
-            </div>
+            </div >
 
         );
     }
 }
+
+function mapStateToProps(state) {
+    return state;
+}
+
+export default connect(mapStateToProps, { handlePicture })(Upload);

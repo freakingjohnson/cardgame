@@ -6,6 +6,7 @@ const LEVEL = "LEVEL"
 const BADSTUFF = "BADSTUFF"
 const HOWMANY = "HOWMANY"
 const FILEURL = "FILEURL"
+const PICTURE = "PICTURE"
 
 const initialState = {
     name: ''
@@ -16,6 +17,7 @@ const initialState = {
     , badStuff: ''
     , howMany: ''
     , fileURL: ''
+    , picture: ''
 }
 
 export default function reducer(state = initialState, action) {
@@ -39,12 +41,17 @@ export default function reducer(state = initialState, action) {
             return Object.assign({}, state, { badStuff: action.payload })
 
         case HOWMANY:
-            return Object.assign({}, state, { howMany: action.payload})
+            return Object.assign({}, state, { howMany: action.payload })
 
         case FILEURL:
-            return Object.assign({}, state, { fileURL: action.payload, })
+            return Object.assign({}, state, { fileURL: action.payload })
+
+        case PICTURE:
+            return Object.assign({}, state, { picture: action.payload })
         default:
             return state;
+
+
     }
 }
 
@@ -96,5 +103,12 @@ export function handleHowMany(howMany) {
     return {
         type: HOWMANY,
         payload: howMany
+    }
+}
+
+export function handlePicture(picture) {
+    return {
+        type: PICTURE,
+        payload: picture
     }
 }

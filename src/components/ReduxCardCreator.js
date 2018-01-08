@@ -19,6 +19,20 @@ for (let i = 1; i < 6; i++) {
 }
 
 export class CardCreator extends Component {
+    // constructor(props) {
+    //     super(props)
+    //     this.state = {
+    //         picture: ''
+    //     }
+    //     this.handlePicture = this.handlePicture.bind(this);
+    // }
+
+    // handlePicture(file) {
+    //     this.setState({
+    //         picture: file
+    //     })
+    //     console.log(this.state.picture)
+    // }
     render() {
         const {
               name
@@ -28,6 +42,7 @@ export class CardCreator extends Component {
             , level
             , badStuff
             , howMany
+            , picture
             , handleName
             , handleDescription
             , handleType
@@ -39,7 +54,7 @@ export class CardCreator extends Component {
         console.log(this.props)
 
         const nameLength = 16 - name.length
-        
+
         const descriptionLength = 160 - description.length
 
         const itemTypeSelect =
@@ -54,7 +69,7 @@ export class CardCreator extends Component {
                 <MenuItem value="feet" primaryText="Footgear" />
                 <MenuItem value="hand" primaryText="Hand Item" />
             </SelectField >
-        
+
         const levelSelect =
             <SelectField
                 floatingLabelText="Level"
@@ -65,7 +80,7 @@ export class CardCreator extends Component {
             >
                 {levels}
             </SelectField >
-        
+
         const badStuffSelect =
             <SelectField
                 floatingLabelText="Bad Stuff"
@@ -80,7 +95,7 @@ export class CardCreator extends Component {
                 <MenuItem value="loseAllItems" primaryText="Lose All Items" />
                 <MenuItem value="loseClass" primaryText="Lose Class" />
             </SelectField >
-        
+
         const xSelect =
             <SelectField
                 floatingLabelText="How Many?"
@@ -91,15 +106,18 @@ export class CardCreator extends Component {
             >
                 {howManyArray}
             </SelectField >
-        
+
         const levelSelector = cardType === "monster" ? levelSelect : undefined
-        
+
         const badStuffSelector = cardType === "monster" ? badStuffSelect : cardType === "curse" ? badStuffSelect : undefined
-        
+
         const itemTypeSelector = cardType === "item" ? itemTypeSelect : undefined
-        
+
         const xSelector = badStuff === "loseLevel" ? xSelect : badStuff === "loseItem" ? xSelect : undefined
-        
+
+        let divStyle = picture ? {
+            backgroundImage: 'url(' + picture[0].preview + ')',
+        } : undefined
         return (
             <div className="container">
                 <form className="container">
@@ -135,8 +153,16 @@ export class CardCreator extends Component {
                     {badStuffSelector}
                     {xSelector}
                     {itemTypeSelector}
-                    <Upload/>
+                    <Upload handlePicture={this.handlePicture} />
                 </form>
+                <div className="cardPreview">
+                    <div className="name">{name}</div>
+                    {level ? <div className="level">lvl: {level} </div> : undefined}
+                    <br/>
+                    {/* <div className="picture">{picture ? <img src={picture[0].preview} alt={picture[0].name}/> : undefined}</div> */}
+                    <div className="picture" style={divStyle}/>
+                    <div className="badStuff">{badStuff}</div>
+                </div>
 
             </div>
         );
