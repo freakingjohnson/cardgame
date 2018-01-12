@@ -55,8 +55,6 @@ export default function reducer(state = initialState, action) {
     }
 }
 
-// export const handleName = (event) => { name: event.target.value }
-
 export function handleName(name) {
     return {
         type: NAME,

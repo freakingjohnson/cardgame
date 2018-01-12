@@ -63,29 +63,24 @@ class Upload extends Component {
             handlePicture
         } = this.props
         console.log(file)
-        const  onDropAccepted = function(file){ setTimeout(() => handlePicture(file), 0)}
+        const onDropAccepted = function (file) { setTimeout(() => handlePicture(file), 0) }
         return (
             <div className="Uploader">
-
-                <div>
-                    <div>
-                        <Dropzone
-                            maxSize={50000}
-                            onDrop={this.onDrop.bind(this)}
-                            onDropAccepted={onDropAccepted}
-                            onDropRejected={this.onDropRejected}
-                            multiple={false}
-                        >
-                            <p>drop file here</p>
-                        </Dropzone>
-                        <RaisedButton
-                            primary={true}
-                            label="upload image"
-                            onClick={this.handleUpload}
-                            disabled={!file ? true : false}
-                        />
-                    </div>
-                </div>
+                <Dropzone
+                    maxSize={500000}
+                    onDrop={this.onDrop.bind(this)}
+                    onDropAccepted={onDropAccepted}
+                    onDropRejected={this.onDropRejected}
+                    multiple={false}
+                >
+                    <p>drop file here</p>
+                </Dropzone>
+                <RaisedButton
+                    primary={true}
+                    label="upload image"
+                    onClick={this.handleUpload}
+                    disabled={!file ? true : false}
+                />
             </div >
 
         );

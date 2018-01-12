@@ -19,20 +19,7 @@ for (let i = 1; i < 6; i++) {
 }
 
 export class CardCreator extends Component {
-    // constructor(props) {
-    //     super(props)
-    //     this.state = {
-    //         picture: ''
-    //     }
-    //     this.handlePicture = this.handlePicture.bind(this);
-    // }
 
-    // handlePicture(file) {
-    //     this.setState({
-    //         picture: file
-    //     })
-    //     console.log(this.state.picture)
-    // }
     render() {
         const {
               name
@@ -81,6 +68,9 @@ export class CardCreator extends Component {
                 {levels}
             </SelectField >
 
+        const badStuffDisplay = badStuff === "Lose Level" ? `Lose ${howMany} Level${howMany > 1 ? "s" : ''}`
+            : badStuff === "Lose Item" ? `Lose ${howMany} Item${howMany > 1 ? "s" : ''}` : badStuff
+
         const badStuffSelect =
             <SelectField
                 floatingLabelText="Bad Stuff"
@@ -89,11 +79,11 @@ export class CardCreator extends Component {
                 value={badStuff}
                 onChange={(event, index, badStuff) => handleBadStuff(badStuff)}
             >
-                <MenuItem value="die" primaryText="You Die" disabled={cardType === 1 ? false : true} />
-                <MenuItem value="loseLevel" primaryText={`Lose ${howMany} Level${howMany > 1 ? "s" : ''}`} />
-                <MenuItem value="loseItem" primaryText={`Lose ${howMany} Item${howMany > 1 ? "s" : ''}`} />
-                <MenuItem value="loseAllItems" primaryText="Lose All Items" />
-                <MenuItem value="loseClass" primaryText="Lose Class" />
+                <MenuItem value="You Die" primaryText="You Die" disabled={cardType === "Monster" ? false : true} />
+                <MenuItem value="Lose Level" primaryText={`Lose ${howMany} Level${howMany > 1 ? "s" : ''}`} />
+                <MenuItem value="Lose Item" primaryText={`Lose ${howMany} Item${howMany > 1 ? "s" : ''}`} />
+                <MenuItem value="Lose All Items" primaryText="Lose All Items" />
+                <MenuItem value="Lose Class" primaryText="Lose Class" />
             </SelectField >
 
         const xSelect =
@@ -107,17 +97,18 @@ export class CardCreator extends Component {
                 {howManyArray}
             </SelectField >
 
-        const levelSelector = cardType === "monster" ? levelSelect : undefined
+        const levelSelector = cardType === "Monster" ? levelSelect : undefined
 
-        const badStuffSelector = cardType === "monster" ? badStuffSelect : cardType === "curse" ? badStuffSelect : undefined
+        const badStuffSelector = cardType === "Monster" ? badStuffSelect : cardType === "Curse" ? badStuffSelect : undefined
 
-        const itemTypeSelector = cardType === "item" ? itemTypeSelect : undefined
+        const itemTypeSelector = cardType === "Item" ? itemTypeSelect : undefined
 
-        const xSelector = badStuff === "loseLevel" ? xSelect : badStuff === "loseItem" ? xSelect : undefined
+        const xSelector = badStuff === "Lose Level" ? xSelect : badStuff === "Lose Item" ? xSelect : undefined
 
-        let divStyle = picture ? {
+        const divStyle = picture ? {
             backgroundImage: 'url(' + picture[0].preview + ')',
         } : undefined
+
         return (
             <div className="container">
                 <form className="container">
@@ -145,9 +136,9 @@ export class CardCreator extends Component {
                         value={cardType}
                         onChange={(event, index, cardType) => handleType(cardType)}
                     >
-                        <MenuItem value="monster" primaryText="Monster" />
-                        <MenuItem value="curse" primaryText="Curse" />
-                        <MenuItem value="item" primaryText="Item" />
+                        <MenuItem value="Monster" primaryText="Monster" />
+                        <MenuItem value="Curse" primaryText="Curse" />
+                        <MenuItem value="Item" primaryText="Item" />
                     </SelectField >
                     {levelSelector}
                     {badStuffSelector}
@@ -158,10 +149,9 @@ export class CardCreator extends Component {
                 <div className="cardPreview">
                     <div className="name">{name}</div>
                     {level ? <div className="level">lvl: {level} </div> : undefined}
-                    <br/>
-                    {/* <div className="picture">{picture ? <img src={picture[0].preview} alt={picture[0].name}/> : undefined}</div> */}
-                    <div className="picture" style={divStyle}/>
-                    <div className="badStuff">{badStuff}</div>
+                    <br />
+                    <div className="picture" style={divStyle} />
+                    {badStuff ? <div className="badStuff">Bad Stuff: {badStuffDisplay}</div> : undefined}
                 </div>
 
             </div>
